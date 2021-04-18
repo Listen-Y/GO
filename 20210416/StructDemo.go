@@ -1,22 +1,46 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
 
 type Person struct {
-	Id      int
-	Name    string
-	Address string
-	Dob     time.Time
+	Id        int
+	Name      string
+	Address   string
+	Dob       time.Time
+	MemberIds []int
+}
+
+type Movie struct {
+	Title  string
+	Year   int  `json:"released"`        //这只是添加一下teg， 在生产json的时候对其进行替换
+	Color  bool `json:"color,omitempty"` //这个表示在生成json的时候color变成小写，并且为空的时候不对其进行解析
+	Actors []string
+}
+
+func main() {
+	persons := [...]Person{
+		{Id: 10, Name: "Bike"},
+		{Id: 20, Name: "listen", Address: "shenzhen"},
+	}
+
+	var mov Movie
+	fmt.Println(mov)
+	fmt.Println(persons)
+
+	data, _ := json.Marshal(persons)
+	fmt.Printf("%s", data)
+
 }
 
 type man Person
 
 func main5() {
 
-	peo := man{10, "listen", "shanxi", time.Now().Local()}
+	peo := man{10, "listen", "shanxi", time.Now().Local(), nil}
 
 	var peo1 man
 	peo1.Address = "shanghai"
@@ -63,7 +87,7 @@ func change(nums [4]int) {
 	fmt.Println(nums)
 }
 
-func main() {
+func main6() {
 	//对于这种情况，指定下标的行为，只能是int整形，可以是乱序设置，但是其内部还是有序的，数组长度最大为设置的最大整数
 	//对应下标没有设置的赋予初始值
 	nums := [...]string{9: "aa", 2: "bb", 1: "cc"}
