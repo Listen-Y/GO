@@ -28,7 +28,8 @@ type ReadImpl interface {
 /**
 接口类型，其实就是定义其的一些方法
 
-表达一个类型属于某个接口只要这个类型实现这个接口中的方法即可
+表达一个类型属于某个接口只要这个类型实现这个接口中的方法即可,
+并且父类接收子类的时候是子类给到的是地址
 
 可以将任意一个值赋给空接口类型。
 */
@@ -41,9 +42,9 @@ func (my *myRead) Reader(data []int) (int, error) {
 	fmt.Println(data)
 	return 1, fmt.Errorf("a")
 }
-func test() interface{} {
+func test() Read {
 	my := myRead{}
-	return my
+	return &my
 }
 
 func main2() {
