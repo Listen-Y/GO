@@ -16,6 +16,7 @@ type aStructure struct {
 }
 
 func main1() {
+
 	mySlice := make([]aStructure, 0)
 	mySlice = append(mySlice, aStructure{"bike", 1, 2},
 		aStructure{"faker", 100, 200},
