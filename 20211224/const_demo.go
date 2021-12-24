@@ -71,7 +71,7 @@ func main4() {
 	}
 }
 
-func main() {
+func main5() {
 
 	var num = 10
 	var name = "name"
@@ -105,4 +105,52 @@ func test(name string) {
 	default:
 
 	}
+}
+
+func add(a, b int) {
+	sum := a + b
+	fmt.Println(sum)
+}
+
+func main6() {
+	a1 := 10
+	b1 := 20
+	add(a1, b1)
+}
+
+func sum(nums ...int) {
+	sum := 0
+	for i := 0; i < len(nums); i++ {
+		sum += nums[i]
+	}
+	fmt.Println(sum)
+}
+
+func sum1(arr ...int) {
+	sum := 0
+	for i, data := range arr {
+		fmt.Println("下标：", i)
+		sum += data
+	}
+	fmt.Println(sum)
+}
+
+func main11() {
+	sum(1, 2, 3)
+	sum(4, 5, 6, 7, 89, 0)
+}
+
+func Test(nums ...int) {
+	var s []int
+	s = nums
+	s = append(s, 1)
+}
+
+func aFunction() (int, int, float64, string) {
+	return 1, 1, 1.0, "a"
+}
+
+func main() {
+	m, _, f, s := aFunction()
+	fmt.Println(m, f, s)
 }
