@@ -150,7 +150,132 @@ func aFunction() (int, int, float64, string) {
 	return 1, 1, 1.0, "a"
 }
 
-func main() {
+func main7() {
 	m, _, f, s := aFunction()
 	fmt.Println(m, f, s)
+	fmt.Println(Test1())
+}
+
+// 这种不会修改源数据->
+func Test1() (a int, b float32) {
+	defer func(a int, b float32) {
+		a = 99
+		b = 99.9
+	}(a, b)
+	a = 10
+	b = 2.1
+	return a + 1, b + 2
+}
+
+// 这种会修改源数据
+func Test2() (a int, b float32) {
+	defer func() {
+		a = 99
+		b = 99.9
+	}()
+	a = 10
+	b = 2.1
+	return a + 1, b + 2
+}
+
+func main8() {
+	fmt.Println(Test1())
+	fmt.Println(Test2())
+}
+
+func namedMinMax(x, y int) (min, max int) {
+	if x > y {
+		min = y
+		max = x
+	} else {
+		min = x
+		max = y
+	}
+	return
+}
+
+func minMax(x, y int) (min, max int) {
+	if x > y {
+		min = y
+		max = x
+	} else {
+		min = x
+		max = y
+	}
+	return min, max
+}
+
+func Swap(a, b *int) {
+	*a, *b = *b, *a
+	fmt.Println(*a, *b)
+}
+
+func main9() {
+	a := 10
+	b := 20
+	fmt.Println(a, b)
+	Swap(&a, &b)
+	fmt.Println(a, b)
+}
+
+func swap(a *int, b *int) {
+	fmt.Println(a)
+	c := a // 此时c也是指针类型
+	fmt.Printf("%T, %v\n", c, c)
+	*a = *b
+	*b = *c
+}
+
+func main10() {
+	f := swap // 函数类型推导
+	fmt.Printf("%T, %v\n", f, f)
+	var aa = 10
+	var b = 20
+	fmt.Println(aa, b)
+	f(&aa, &b)
+	fmt.Println(aa, b)
+}
+
+// type可以定义类型, 也可以给已存在的类型起别名
+type fType func(a, b *int)
+type fType1 func(a, b int) int
+type fType2 func(a, b, c int) (int, string)
+type fType3 int
+
+func test1(a, b *int) {
+	fmt.Println("test1")
+}
+
+func test2(a, b int) int {
+	fmt.Println("test2")
+	return 0
+}
+
+func test3(a, b, c int) (int, string) {
+	fmt.Println("test3")
+	return 0, "test3"
+}
+
+func test4(a, b, c int) (int, string) {
+	fmt.Println("test4")
+	return 0, "test4"
+}
+
+func main() {
+	a := 1
+	b := 2
+	c := 3
+
+	var f fType
+	f = test1
+	f(&a, &b)
+
+	f1 := test2
+	_ = f1(a, b)
+
+	var f2 fType2
+	f2 = test3
+	_, _ = f2(a, b, c)
+	f2 = test4
+	_, _ = f2(a, b, c)
 }
