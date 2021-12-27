@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func addUpper() func(i int) int {
@@ -54,8 +55,36 @@ func sum(a, b int) int {
 	return ret
 }
 
-func main() {
+func main3() {
 	fmt.Println("sum", sum(10, 20))
 	file, _ := os.Open("D:/a.txt")
 	defer file.Close()
+}
+
+func main() {
+
+	// 获取当前时间
+	now := time.Now()
+	fmt.Printf("now=%v, now Type=%T\n", now, now)
+
+	// 时间戳
+	fmt.Println("毫秒时间戳", now.Unix())
+	fmt.Println("纳秒时间戳", now.UnixNano())
+
+	// 获取年月日时分秒
+	fmt.Println("年=", now.Year())
+	fmt.Println("月=", now.Month())
+	fmt.Println("日=", now.Day())
+	fmt.Println("时=", now.Hour())
+	fmt.Println("分=", now.Minute())
+	fmt.Println("秒=", now.Second())
+
+	// 格式化日期
+	fmt.Printf("当前年月日%02d-%02d-%02d %02d:%02d:%02d\n", now.Year(), now.Month(), now.Day(),
+		now.Hour(), now.Minute(), now.Second())
+
+	// 还有一种方式
+	fmt.Println(now.Format("2006/01/02 15:04:05")) // 这个时间格式是固定的
+	fmt.Println(now.Format("2006-01-02"))
+	fmt.Println(now.Format("15:04:05"))
 }
