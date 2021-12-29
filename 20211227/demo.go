@@ -85,6 +85,63 @@ func main5() {
 	fmt.Println("slice", slice1) // 输出 slice [99 999 2 3 4 5 6 7]
 }
 
-func main() {
+func main6() {
 
+	/*	// 第一种方式
+		arr := [5]int{0, 1, 2, 3, 4}
+		_ := arr[0:4] // 这底层就是分割出来一个切片, 采用左闭右的方式进行隔离出数据
+
+		// 第二种方式
+		_ := make([]int, 0, 4)*/
+
+	a := []int{1, 2, 3, 4, 5}
+	s := make([]int, 1, 4)
+	fmt.Println(s)
+	copy(s, a)
+	fmt.Println(s)
+}
+
+func main7() {
+	arr := [5]int{1, 2, 3, 4, 5}
+
+	var slice []int
+	slice = arr[:]
+	var slice2 = slice
+	slice2[0] = 10
+	fmt.Println("arr", arr)
+	fmt.Println("slice", slice)
+	fmt.Println("slice2", slice2)
+}
+
+func main() {
+	slice1 := make([]int, 1, 2)
+	slice2 := make([]int, 1, 2)
+	slice3 := make([]int, 1, 2)
+
+	test5(slice1)
+	test6(slice2)
+	test7(slice3)
+
+	fmt.Println("slice1", slice1)
+	fmt.Println("slice2", slice2)
+	fmt.Println("slice3", slice3)
+}
+
+func test5(slice []int) {
+	slice[0] = 10
+}
+
+func test6(slice []int) {
+	slice = append(slice, 5)
+	slice[0] = 10
+}
+
+func test7(slice []int) {
+	slice = append(slice, 5)
+	slice = append(slice, 5)
+	slice = append(slice, 5)
+	slice = append(slice, 5)
+	slice = append(slice, 5)
+	slice = append(slice, 5)
+	slice[0] = 10
 }
