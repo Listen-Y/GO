@@ -113,7 +113,7 @@ func main7() {
 	fmt.Println("slice2", slice2)
 }
 
-func main() {
+func main8() {
 	slice1 := make([]int, 1, 2)
 	slice2 := make([]int, 1, 2)
 	slice3 := make([]int, 1, 2)
@@ -144,4 +144,18 @@ func test7(slice []int) {
 	slice = append(slice, 5)
 	slice = append(slice, 5)
 	slice[0] = 10
+}
+
+func main9() {
+	str := "abcdefg"
+	//slice := str[4:]
+	//mt.Println(slice)
+	strArr := []byte(str)
+	strArr[0] = 'm'
+	fmt.Println("str:", str, "strArr:", string(strArr))
+
+	str1 := "我是Listen"
+	sreArr1 := []rune(str1)
+	sreArr1[0] = '你'
+	fmt.Println("strArr1:", string(sreArr1))
 }
