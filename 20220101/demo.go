@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -182,7 +183,7 @@ func main7() {
 	fmt.Println("写入成功")
 }
 
-func main() {
+func main8() {
 	file, err := os.OpenFile("D:\\test\\study1.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal("open file error")
@@ -210,4 +211,51 @@ func main() {
 	// 必须进行
 	_ = writer.Flush()
 	fmt.Println("写入成功")
+}
+
+func FileExist(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil { // 文件或者文件夹存在
+		return true, err
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
+
+func main() {
+	file := CopyFile2("D:\\test\\study1.txt", "D:\\test\\study.txt")
+	fmt.Println(file)
+}
+
+// 这种方式简单不严谨
+func CopyFile(srcFileName, dstFileName string) bool {
+	data, err := ioutil.ReadFile(srcFileName)
+	if err != nil {
+		return false
+	}
+	fmt.Println(data)
+	err = ioutil.WriteFile(dstFileName, data, 0666)
+	return err == nil
+}
+
+// 合理的方式
+func CopyFile2(srcFileName, dstFileName string) bool {
+	openFile, err := os.Open(srcFileName)
+	if err != nil {
+		return false
+	}
+	defer openFile.Close()
+	reader := bufio.NewReader(openFile)
+
+	dstFile, err := os.OpenFile(dstFileName, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0666)
+	if err != nil {
+		return false
+	}
+	defer dstFile.Close()
+
+	writer := bufio.NewWriter(dstFile)
+	_, err = io.Copy(writer, reader)
+	return err == nil
 }
