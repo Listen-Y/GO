@@ -224,7 +224,7 @@ func FileExist(path string) (bool, error) {
 	return false, err
 }
 
-func main() {
+func main9() {
 	file := CopyFile2("D:\\test\\study1.txt", "D:\\test\\study.txt")
 	fmt.Println(file)
 }
@@ -258,4 +258,57 @@ func CopyFile2(srcFileName, dstFileName string) bool {
 	writer := bufio.NewWriter(dstFile)
 	_, err = io.Copy(writer, reader)
 	return err == nil
+}
+
+type Count struct {
+	CharCount  int
+	NumCount   int
+	SpaceCount int
+	OtherCount int
+}
+
+func count(data []string) Count {
+
+	c := Count{
+		CharCount:  0,
+		NumCount:   0,
+		SpaceCount: 0,
+		OtherCount: 0,
+	}
+
+	for _, val := range data {
+		for _, ch := range val {
+			switch {
+			case ch >= 'a' && ch <= 'z':
+				fallthrough
+			case ch >= 'A' && ch <= 'Z':
+				c.CharCount++
+			case ch >= '0' && ch <= '9':
+				c.NumCount++
+			case ch == ' ' || ch == '\t':
+				c.SpaceCount++
+			default:
+				fmt.Print(string(ch), " ")
+				c.OtherCount++
+			}
+		}
+	}
+	return c
+}
+
+func main() {
+	open, err := os.Open("D:\\test\\study.txt")
+	if err != nil {
+		return
+	}
+	reader := bufio.NewReader(open)
+	data := make([]string, 0)
+	for true {
+		readString, err := reader.ReadString('\n')
+		if err == io.EOF {
+			break
+		}
+		data = append(data, readString)
+	}
+	fmt.Println(count(data))
 }
