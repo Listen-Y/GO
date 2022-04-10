@@ -83,6 +83,7 @@ func insertTest() {
 	}
 
 	fmt.Println("insert success:", id)
+	defer Db.Close()
 }
 
 func selectTest() {
@@ -94,6 +95,8 @@ func selectTest() {
 	}
 
 	fmt.Println("select success:", person)
+	defer Db.Close()
+
 }
 
 func updateTest() {
@@ -107,6 +110,8 @@ func updateTest() {
 		fmt.Println("rows failed, ", err)
 	}
 	fmt.Println("update succ:", row)
+	defer Db.Close()
+
 }
 
 func deleteTest() {
@@ -122,6 +127,8 @@ func deleteTest() {
 	}
 
 	fmt.Println("delete succ: ", row)
+	defer Db.Close()
+
 }
 
 /*
@@ -167,4 +174,6 @@ func transactionTest() {
 	fmt.Println("insert succ:", id)
 
 	conn.Commit()
+	defer Db.Close()
+
 }
