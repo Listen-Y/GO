@@ -51,7 +51,107 @@ func init() {
 
 func main() {
 	//gormInsert()
-	selectTest()
+	//selectTest()
+	//updateTest()
+	//deleteTest()
+	softDelete()
+}
+
+/**
+如果您的模型包含了一个 gorm.deletedat 字段（gorm.Model 已经包含了该字段)，它将自动获得软删除的能力！
+
+拥有软删除能力的模型调用 Delete 时，记录不会被从数据库中真正删除。但 GORM 会将 DeletedAt 置为当前时间，
+并且你不能再通过正常的查询方法找到该记录。
+
+永久删除
+db.Unscoped().Delete(&order)
+// DELETE FROM orders WHERE id=10;
+*/
+func softDelete() {
+	user := User{
+		Name:         "",
+		Email:        nil,
+		Age:          0,
+		Birthday:     nil,
+		MemberNumber: sql.NullString{},
+		ActivedAt:    sql.NullTime{},
+		Model: gorm.Model{
+			ID:        4,
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+			DeletedAt: gorm.DeletedAt{},
+		},
+	}
+	// user 的 ID 是 `111`
+	db.Delete(&user)
+	// UPDATE users SET deleted_at="2013-10-29 10:23" WHERE id = 111;
+
+	// 批量删除
+	db.Where("age = ?", 20).Delete(&User{})
+	// UPDATE users SET deleted_at="2013-10-29 10:23" WHERE age = 20;
+
+	// 在查询时会忽略被软删除的记录
+	users := make([]User, 0)
+	// 获取全部记录
+	db.Find(&users)
+	// SELECT * FROM users
+	for _, user := range users {
+		fmt.Printf("%+v\n", user)
+	}
+
+}
+
+func deleteTest() {
+	user := User{
+		Name:         "",
+		Email:        nil,
+		Age:          0,
+		Birthday:     nil,
+		MemberNumber: sql.NullString{},
+		ActivedAt:    sql.NullTime{},
+		Model: gorm.Model{
+			ID:        3,
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+			DeletedAt: gorm.DeletedAt{},
+		},
+	}
+	// Email 的 ID 是 `10`
+	db.Delete(&user)
+	// DELETE from emails where id = 10;
+
+	// 带额外条件的删除
+	db.Where("name = ?", "jinzhu").Delete(&user)
+	// DELETE from emails where id = 10 AND name = "jinzhu";
+}
+
+func updateTest() {
+	// 条件更新
+	db.Model(&User{}).Where("age = ?", 20).Update("name", "1111")
+	// UPDATE users SET name='1111', updated_at='2013-11-17 21:34:10' WHERE active=true;
+
+	// User 的 ID 是 `111`
+	user := User{
+		Name:         "",
+		Email:        nil,
+		Age:          0,
+		Birthday:     nil,
+		MemberNumber: sql.NullString{},
+		ActivedAt:    sql.NullTime{},
+		Model: gorm.Model{
+			ID:        2,
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+			DeletedAt: gorm.DeletedAt{},
+		},
+	}
+	db.Model(&user).Update("name", "2222")
+	// UPDATE users SET name='2222', updated_at='2013-11-17 21:34:10' WHERE id=111;
+
+	user.ID++
+	// 根据条件和 model 的值进行更新
+	db.Model(&user).Where("age = ?", 20).Update("name", "3333")
+	// UPDATE users SET name='3333', updated_at='2013-11-17 21:34:10' WHERE id=111 AND active=true;
 }
 
 func selectTest() {
