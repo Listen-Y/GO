@@ -38,28 +38,7 @@ func QuickSort(arr []int) []int {
 	return result
 }
 
-func HeapSortMax(arr []int, length int) []int {
-	if length <= 1 {
-		return arr
-	}
-	depth := length/2 - 1 //二叉树深度
-	for i := depth; i >= 0; i-- {
-		topmax := i //假定最大的位置就在i的位置
-		leftchild := 2*i + 1
-		rightchild := 2*i + 2
-		if leftchild <= length-1 && arr[leftchild] > arr[topmax] { //防止越过界限
-			topmax = leftchild
-		}
-		if rightchild <= length-1 && arr[rightchild] > arr[topmax] { //防止越过界限
-			topmax = rightchild
-		}
-		if topmax != i {
-			arr[i], arr[topmax] = arr[topmax], arr[i]
-		}
-	}
-	return arr
-}
-
+// 堆排序
 func HeapSort(arr []int) []int {
 	length := len(arr)
 	for i := 0; i < length; i++ {
@@ -71,3 +50,43 @@ func HeapSort(arr []int) []int {
 	}
 	return arr
 }
+
+func HeapSortMax(arr []int, length int) {
+	if length <= 1 {
+		return
+	}
+	depth := length/2 - 1
+	for i := depth; i >= 0; i-- {
+		maxIndex := i
+		leftIndex := i*2 + 1
+		rightIndex := i*2 + 2
+		if leftIndex <= length-1 && arr[leftIndex] > arr[maxIndex] {
+			maxIndex = leftIndex
+		}
+		if rightIndex <= length-1 && arr[rightIndex] > arr[maxIndex] {
+			maxIndex = rightIndex
+		}
+		if maxIndex != i {
+			arr[i], arr[maxIndex] = arr[maxIndex], arr[i]
+		}
+	}
+}
+
+// 二分查找
+func binSearch(arr []int, target int) bool {
+	low := 0
+	hight := len(arr) - 1
+	for low <= hight {
+		mid := (low + hight) / 2
+		if arr[mid] > target {
+			hight = mid - 1
+		} else if arr[mid] < target {
+			low = mid + 1
+		} else {
+			return true
+		}
+	}
+	return false
+}
+
+// 选择排序
