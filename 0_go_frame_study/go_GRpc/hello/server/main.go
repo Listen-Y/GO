@@ -5,7 +5,7 @@ import (
 	"net"
 
 	// 引入编译生成的包
-	pb ""
+	pb "go_GRpc/proto/hello"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
@@ -13,7 +13,7 @@ import (
 
 const (
 	// Address gRPC服务地址
-	Address = "127.0.0.1:50052"
+	Address = "127.0.0.1:8081"
 )
 
 // 定义helloService并实现约定的接口
@@ -31,6 +31,7 @@ func (h helloService) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.He
 }
 
 func main() {
+	grpclog.Error("begin")
 	listen, err := net.Listen("tcp", Address)
 	if err != nil {
 		grpclog.Fatalf("Failed to listen: %v", err)
@@ -42,6 +43,8 @@ func main() {
 	// 注册HelloService
 	pb.RegisterHelloServer(s, HelloService)
 
-	grpclog.Println("Listen on " + Address)
-	s.Serve(listen)
+	grpclog.Error("Listen on " + Address)
+	if err = s.Serve(listen); err != nil {
+		grpclog.Error(err)
+	}
 }
